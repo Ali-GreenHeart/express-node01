@@ -1,7 +1,5 @@
 import { Router } from "express";
-import {
-    getAll, getById, getByAuthorId, createBook, updateBook, deleteBook
-} from "../controllers/author.js";
+import { createBook, deleteBook, getAll, getByAuthorId, getById, updateBook } from "../controllers/book.js";
 
 const r = Router()
 
@@ -10,6 +8,6 @@ r.get('/author/:authorId', getByAuthorId)
 r.get('/:id', getById)
 r.post('/', createBook)
 r.put('/:id', updateBook)
-r.delete('/:id/:authorId', deleteBook)
+r.delete('/:id', deleteBook)
 
 export default r;

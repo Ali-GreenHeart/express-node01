@@ -1,25 +1,18 @@
-import { model } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 
-export default model('author', {
+const authorSchema = new Schema({
     name: {
         type: String,
         required: true
     },
-    pageCount: {
-        type: Number,
-        required: true
-    },
-    description: {
+    surname: {
         type: String,
         required: true
     },
-    authorId: {
+    bookIds: [{
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "Author"
-    },
-    genre: {
-        type: String,
-        required: true
-    },
+        ref: 'Book'
+    }]
 }, { versionKey: false, timestamps: true })
+
+export const authorModel = model('author', authorSchema)

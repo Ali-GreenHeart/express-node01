@@ -1,4 +1,4 @@
-import authorModel from "../models/author.js"
+import { authorModel } from "../models/author.js"
 
 export const getAll = async (req, res) => {
     const authors = await authorModel.find()
@@ -23,6 +23,6 @@ export const updateAuthor = async (req, res) => {
 
 export const deleteAuthor = async (req, res) => {
     const { id } = req.params
-    await authorModel.findByIdAndDelete(id)
+    await authorModel.findOneAndDelete({ _id: id })
     res.send('silindi')
 }

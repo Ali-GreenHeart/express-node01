@@ -1,14 +1,13 @@
+import dotenv from 'dotenv'
 import express from 'express'
 import mongoose from 'mongoose'
-import bookRouter from './routers/book.js'
 import authorRouter from './routers/author.js'
-import { mongoConnectUrl } from './utils.js'
-import dotenv from 'dotenv'
+import bookRouter from './routers/book.js'
 dotenv.config()
 // env
 
 const app = express()
-mongoose.connect(mongoConnectUrl)
+mongoose.connect(process.env.EXPRESS_MONGO_DB_CONNECTION_STRING)
 app.use(express.json())
 app.use('/book', bookRouter)
 app.use('/author', authorRouter)

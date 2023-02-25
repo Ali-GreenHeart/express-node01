@@ -1,5 +1,4 @@
 import bookModel from "../models/book.js"
-import authorModel from "../models/author.js"
 
 export const getAll = async (req, res) => {
     const books = await bookModel.find()
@@ -20,9 +19,6 @@ export const getByAuthorId = async (req, res) => {
 export const createBook = async (req, res) => {
     const newBook = req.body
     const { _id } = await bookModel.create(newBook)
-    await authorModel.findByIdAndUpdate(newBook.authorId, {
-        $push: { bookIds: _id }
-    })
     res.send(_id)
 }
 export const updateBook = async (req, res) => {
@@ -32,8 +28,7 @@ export const updateBook = async (req, res) => {
     res.send(newBook)
 }
 export const deleteBook = async (req, res) => {
-    const { id, authorId } = req.params
-    await bookModel.findByIdAndRemove(id)
-    await authorModel.updateOne({ authorId }, { $pull: { bookIds: id } })
+    const { id } = req.params
+    await bookModel.findOneAndDelete({ _id: id })
     res.send('silindi')
 }
