@@ -26,15 +26,6 @@ const bookSchema = new Schema({
 }, { versionKey: false, timestamps: true })
 
 
-// bookSchema.pre("save", async function (next) {
-//     const docCount = await mongoose.model('book').countDocuments({ name: this.name })
-//     if (docCount === 0) {
-//         next()
-//     } else {
-//         process.exit(-1)
-//     }
-// })
-
 bookSchema.post('save', async function () {
     const newBookId = this._id
     await authorModel.findByIdAndUpdate(this.authorId, {
@@ -44,22 +35,12 @@ bookSchema.post('save', async function () {
 
 bookSchema.pre('findOneAndDelete', async function (next) {
     const bookId = this.getFilter()._id
-    console.log('---')
     const book = await mongoose.model('book').findOne({ _id: bookId }).clone()
-    await mongoose.model('author').updateOne({ authorId: book.authorId }, { $pull: { bookIds: bookId } })
+    if (!book) {
+        next(new Error('bele kitab yoxdur...'))
+    }
+    await mongoose.model('author').updateOne({ _id: book.authorId }, { $pull: { bookIds: bookId } })
     next()
 })
-
-// bookSchema.post('findOneAndRemove', async function () {
-//     const id = this.getFilter()._id 
-//     await mongoose.model('author').findOne({})
-//     console.log('---')
-// })
-
-/*
-1. muellif silinende ona aid olan kitablar silinsin.
-2. kitab silinende muellifden silinsin ve eksi
-*/
-
 
 export default model('book', bookSchema);

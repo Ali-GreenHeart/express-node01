@@ -15,4 +15,10 @@ const authorSchema = new Schema({
     }]
 }, { versionKey: false, timestamps: true })
 
+authorSchema.pre("findOneAndDelete", async function (next) {
+    const authorId = this.getFilter()._id
+    await mongoose.model('book').deleteMany({ authorId })
+    next()
+})
+
 export const authorModel = model('author', authorSchema)
